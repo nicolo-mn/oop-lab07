@@ -26,6 +26,7 @@ public class MiniGUI {
     private static final int PROPORTION = 5;
     private final Random randomGenerator = new Random();
     private final JFrame frame = new JFrame(TITLE);
+    private final static String RESULT = "Result: ";
 
     /**
      * Creates a new {@link MiniGUI}.
@@ -40,22 +41,22 @@ public class MiniGUI {
         /*
          * Handlers
          */
-        write.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                System.out.println(randomGenerator.nextInt());
-            }
-        });
-
         /* Part 1 */
         final JPanel boxPanel= new JPanel();
         boxPanel.setLayout(new BoxLayout(boxPanel, BoxLayout.LINE_AXIS));
         canvas.add(boxPanel, BorderLayout.CENTER);
         boxPanel.add(write);
         /* Part 2 */
-        final JComponent text = new JTextField("Result");
+        final JTextField text = new JTextField(RESULT);
         canvas.add(text, BorderLayout.NORTH);
-        
+        write.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                int randomNum = randomGenerator.nextInt();
+                System.out.println(randomNum);
+                text.setText(RESULT + randomNum);
+            }
+        });
     }
 
     private void display() {
