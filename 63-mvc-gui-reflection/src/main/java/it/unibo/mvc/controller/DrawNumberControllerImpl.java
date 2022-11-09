@@ -14,7 +14,7 @@ import java.util.Objects;
 public final class DrawNumberControllerImpl implements DrawNumberController {
 
     private final DrawNumber model;
-    private LinkedList<DrawNumberView> view;
+    private LinkedList<DrawNumberView> views;
 
     /**
      * Builds a new game controller provided a game model.
@@ -23,7 +23,7 @@ public final class DrawNumberControllerImpl implements DrawNumberController {
      */
     public DrawNumberControllerImpl(final DrawNumber model) {
         this.model = model;
-        this.view = new LinkedList<>();
+        this.views = new LinkedList<>();
     }
 
     @Override
@@ -33,14 +33,14 @@ public final class DrawNumberControllerImpl implements DrawNumberController {
         //     throw new IllegalStateException("The view is already set! Multiple views are not supported");
         // }
         // this.view = view;
-        this.view.add(view);
+        this.views.add(view);
         view.setController(this);
         view.start();
     }
 
     @Override
     public void newAttempt(final int n) {
-        for (DrawNumberView view : this.view) {
+        for (DrawNumberView view : this.views) {
             Objects.requireNonNull(view, "There is no view attached!").result(model.attempt(n));
         }
     }

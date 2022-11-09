@@ -4,7 +4,6 @@ import it.unibo.functional.api.Function;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,7 +54,7 @@ public final class Transformers {
      * @param <O> output elements type
      */
     public static <I, O> List<O> transform(final Iterable<I> base, final Function<I, O> transformer) {
-        return flattenTransform(base, new Function<I,List<O>>() {
+        return flattenTransform(base, new Function<I,List<? extends O>>() {
 
             @Override
             public List<? extends O> call(I input) {
