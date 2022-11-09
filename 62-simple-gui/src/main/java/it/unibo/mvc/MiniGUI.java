@@ -49,9 +49,11 @@ public class MiniGUI {
         /* Part 2 */
         final JTextField text = new JTextField(RESULT);
         canvas.add(text, BorderLayout.NORTH);
+        
         write.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
+                /* Part 3 */
                 int randomNum = randomGenerator.nextInt();
                 System.out.println(randomNum);
                 text.setText(RESULT + randomNum);
