@@ -1,12 +1,13 @@
 package it.unibo.mvc;
 
-import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import it.unibo.mvc.api.DrawNumberController;
+import it.unibo.mvc.api.DrawNumberView;
 import it.unibo.mvc.controller.DrawNumberControllerImpl;
 import it.unibo.mvc.model.DrawNumberImpl;
-import it.unibo.mvc.view.DrawNumberConsoleView;
-import it.unibo.mvc.view.DrawNumberSwingView;
+
 
 /**
  * Application entry-point.
@@ -27,7 +28,15 @@ public final class LaunchApp {
      * @throws IllegalAccessException in case of reflection issues
      * @throws IllegalArgumentException in case of reflection issues
      */
-    public static void main(final String... args) throws Exception {
+    public static void main(final String... args) 
+        throws 
+        ClassNotFoundException, 
+        NoSuchMethodException, 
+        SecurityException, 
+        InstantiationException, 
+        IllegalAccessException, 
+        IllegalArgumentException, 
+        InvocationTargetException {
         final var model = new DrawNumberImpl();
         final DrawNumberController app = new DrawNumberControllerImpl(model);
         // Part 1
@@ -35,13 +44,18 @@ public final class LaunchApp {
         // app.addView(new DrawNumberSwingView());
         // app.addView(new DrawNumberConsoleView());
         // Part 2
-        final Class<?> clConsoleView = Class.forName("it.unibo.mvc.view.DrawNumberConsoleView");
-        final Class<?> clSwingView = Class.forName("it.unibo.mvc.view.DrawNumberSwingView");
-        final Constructor<?> cns1 = clConsoleView.getConstructor();
-        final Constructor<?> cns2 = clSwingView.getConstructor();
-        for (int i = 0; i < 3; i++) {
-            app.addView((DrawNumberConsoleView)cns1.newInstance());
-            app.addView((DrawNumberSwingView)cns2.newInstance());
+        for (String viewType : List.of("Console", "Swing")) {
+            final Class<?> cl = Class.forName("it.unibo.mvc.view.DrawNumber" + viewType + "View");
+            for (int i = 0; i < 3; i++) {
+                final var newViewInstance = cl.getConstructor().newInstance();
+                if (DrawNumberView.class.isAssignableFrom(newViewInstance.getClass())) {
+                    app.addView((DrawNumberView) newViewInstance);
+                } else {
+                    throw new IllegalStateException(
+                        newViewInstance.getClass() + " is not a subclass of " + DrawNumberView.class
+                    );
+                }
+            }
         }
     }
 }
